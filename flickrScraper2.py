@@ -112,15 +112,24 @@ for href in imageLeads:
 
     trueImageSoup = BeautifulSoup(trueImageSource)
 
-    trueImageLink = trueImageSoup.find("img")
+    trueHref = trueImageSoup.find("img").get("src")[2:]
+    trueHref = "https://" + trueHref
+    print(str(tempInt) + "/" + str(len(imageLeads)) + ": " + trueHref)
 
-    trueHref = trueImageLink.get("src")[2:]
-    trueHref = "https://" + href
-    print(str(tempInt) + "/" + str(len(imageLeads)) + ": " + href)
-    trueImageUrls.append(href)
-    tempInt = tempInt + 1
+    full_name = "/Users/anonymousvikram/recyclingVision/downloads/drink can single/Flickr" + str(
+            tempInt) + ".jpg"
+    
+    print(str(tempInt) + "/" + str(len(imageLeads)) + ": " + full_name[66:])
 
-print(str(len(trueImageUrls)) + " true images found")
+    r = requests.get(trueHref, stream=True)
+    with open(full_name, 'wb') as f:
+        r.raw.decode_content = True
+        shutil.copyfileobj(r.raw, f)   
+        trueImageUrls.append(trueHref) 
+        tempInt = tempInt + 1
+        
+
+'''print(str(len(trueImageUrls)) + " true images found")
 tempInt = 0
 for imageUrl in trueImageUrls:
     full_name = "/Users/anonymousvikram/recyclingVision/downloads/drink can single/Flickr" + str(
@@ -132,7 +141,7 @@ for imageUrl in trueImageUrls:
     with open(full_name, 'wb') as f:
         r.raw.decode_content = True
         shutil.copyfileobj(r.raw, f)    
-        tempInt += 1
+        tempInt += 1'''
 
 
 print(str(tempInt) + " images processed")
